@@ -7,7 +7,7 @@ typedef struct {
     int c;
 } my_struct;
 
-
+#if 0
 void iterate(vector(my_struct*) v)
 {
     // Index style
@@ -21,8 +21,12 @@ void iterate(vector(my_struct*) v)
     printf("\n"); 
 }
 
+#endif
+
+
 int main(void)
 {
+    #if 0
     // Define the vector object
     vector(int) my_vec = NULL;
     
@@ -53,5 +57,5 @@ int main(void)
     iterate(v);
     vector_free(v);
 
-
+    #endif
 }
