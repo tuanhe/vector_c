@@ -9,6 +9,12 @@ typedef struct {
     int c;
 } my_struct;
 
+typedef struct { 
+    int a;
+    int b;
+    char* name ;
+} str_struct;
+
 #if 0
 void iterate(vector(my_struct*) v)
 {
@@ -42,12 +48,31 @@ void iterate_print(vector* v)
     //printf("\n"); 
 }
 
+void iterate_print_struct(vector* v)
+{
+    // Index style
+    for (size_t i = 0; i < vector_size(v); i++){
+        my_struct *p = (my_struct*)vector_at(v, i);
+        printf("a:%d  b:%d  c:%d\n", p->a, p->b, p->c);
+    }
+    printf("vector size : %ld   capacity : %ld  element size : %ld \n", 
+                        v->element_num, v->capacity, v->element_size);
+}
+
+void iterate_print_strstruct(vector* v)
+{
+    // Index style
+    for (size_t i = 0; i < vector_size(v); i++){
+        str_struct *p = (str_struct*)vector_at(v, i);
+        printf("a:%d  b:%d  c:%s\n", p->a, p->b, p->name);
+    }
+    printf("vector size : %ld   capacity : %ld  element size : %ld \n", 
+                        v->element_num, v->capacity, v->element_size);
+}
+
 int main(void)
 {
-    vector* v1 =  vector_create(sizeof(my_struct), NULL);
-    printf("v1 num  %ld \n", v1->element_num );
-    printf("v1 capa %ld \n", v1->capacity );
-    printf("v1 size %ld \n", v1->element_size );
+
     
     vector* v2 =  vector_create(sizeof(int), NULL);
     printf("v2 num  %ld \n",  v2->element_num );
@@ -80,6 +105,47 @@ int main(void)
 
     vector_destroy(v2);
 
+
+    vector* v1 =  vector_create(sizeof(my_struct), NULL);
+    printf("v1 num  %ld \n", v1->element_num );
+    printf("v1 capa %ld \n", v1->capacity );
+    printf("v1 size %ld \n", v1->element_size );
+
+    my_struct test;
+    test.a = 12;
+    test.b = 81;
+    test.c = 0x1c;
+    vector_push_back(v1, &test);
+    test.c = 0xc;
+    vector_push_back(v1, &test);
+    test.a = 0xac;
+    vector_insert(v1, 0, &test);
+
+    iterate_print_struct(v1);
+    vector_destroy(v1);
+
+    vector* v3 =  vector_create(sizeof(str_struct), NULL);
+    printf("v3 num  %ld \n", v3->element_num );
+    printf("v3 capa %ld \n", v3->capacity );
+    printf("v3 size %ld \n", v3->element_size );
+
+    str_struct st;
+    for(uint32_t i = 0; i < 3; ++i)
+    {
+        char a[10];
+        st.a = i +8;
+        st.b = i*3+2;
+        snprintf(a, sizeof(a), "loop_%d", i);
+        st.name = a;   
+        vector_push_back(v3, &st);
+    }
+
+    st.name = "checkit";
+    vector_push_back(v3, &st);
+
+    vector_erase(v3, 0);
+
+    iterate_print_strstruct(v3);
     #if 0
     // Access elements like normal arrays
     printf("%d\n", my_vec[0]);
